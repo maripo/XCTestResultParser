@@ -9,7 +9,7 @@ var HistoryGraph = function (runs, canvas, dateContainer) {
 	var self = this;
 	this.dateContainer = dateContainer;
 	this.canvas.parentElement.addEventListener('scroll', function(){
-		self.dateContainer.style.marginLeft = '-'+self.canvas.parentElement.scrollLeft + 'px';
+		self.dateContainer.style.marginLeft = '-'+(self.canvas.parentElement.scrollLeft) + 'px';
 	});
 };
 HistoryGraph.prototype.setOnFocus = function (onFocus) {
@@ -52,9 +52,17 @@ HistoryGraph.prototype._getOnClick = function (index) {
 		self.selectResultAt(index);
 	}
 };
+HistoryGraph.PIXEL_PER_RUN = 24;
+
 HistoryGraph.prototype.render = function () {
+
+	element("runGraphScaleMax").innerHTML = this.maxTotal;
+	element("runGraphScaleHalf").innerHTML = Math.round(this.maxTotal/2);
+	
 	var canvas = this.canvas;
 	this.height = canvas.height;
+	canvas.width = HistoryGraph.PIXEL_PER_RUN * (this.dataSize-1);
+	this.dateContainer.style.width = (HistoryGraph.PIXEL_PER_RUN * (this.dataSize-1) + 16) + "px";
 	this.width = canvas.width;
 
 	var context = canvas.getContext("2d");
@@ -80,7 +88,7 @@ HistoryGraph.prototype.render = function () {
 		var runDate = new Date(run.date).toString('yy/MM/dd HH:mm');
 		a.innerHTML = runDate;
 		a.className = 'dateLabel';
-		a.style.left = Math.floor(coordinate.x)+'px';
+		a.style.left = Math.floor(coordinate.x+9)+'px';
 		this.dateContainer.appendChild(a);
 	}
 	

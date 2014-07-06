@@ -13,14 +13,22 @@
 		<section>
 			<h2>History</h2>
 			<div class="runGraphContainer">
-				<div style="width:800px;height:160px;" class="runGraphCanvasContainer">
+				<div id="runGraphScale">
+					<div id="runGraphScaleMax" class="label max"></div>
+					<div id="runGraphScaleHalf" class="label half"></div>
+					<div id="runGraphScaleMin" class="label min">0</div>
+				</div>
+				<!--Scrollable section for canvas"-->
+				<div class="runGraphCanvasContainer">
 					<canvas id="runGraph" width="1600" height="180"></canvas>
 				</div>
+				<!--Scrollable section for date"-->
 				<div class="runGraphDateContainer" id="runGraphDateContainer">
 					<div class="runGraphDates" id="runGraphDates">
 					</div>
 				</div>
 			<div>
+			<div class="clear"></div>
 		</section>
 		<!--Run Report-->
 		<section id="run">
