@@ -20,7 +20,10 @@
 				</div>
 				<!--Scrollable section for canvas"-->
 				<div class="runGraphCanvasContainer">
-					<canvas id="runGraph" width="1600" height="180"></canvas>
+					<div id="canvasWrapper" id="runGraph" style="width:1600px;height:160px;position:relative;">
+						<div id="canvasCover" style="width:1600px;height:160px;position:absolute;z-index:3;"></div>
+						<canvas id="runGraph" width="1600" height="160" style="position:absolute;z-index:1;"></canvas>
+					</div>
 				</div>
 				<!--Scrollable section for date"-->
 				<div class="runGraphDateContainer" id="runGraphDateContainer">

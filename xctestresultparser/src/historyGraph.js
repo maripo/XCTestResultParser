@@ -12,24 +12,29 @@ var HistoryGraph = function (runs, canvas, dateContainer) {
 		self.dateContainer.style.marginLeft = '-'+(self.canvas.parentElement.scrollLeft) + 'px';
 	});
 };
-HistoryGraph.prototype.setOnFocus = function (onFocus) {
+HistoryGraph.prototype.setOnFocus = function (element, onFocus) {
 	this.focusIndex = null;
-	this.canvas.addEventListener('mousemove', this._getOnFocusFunc(onFocus));
+	element.addEventListener('mousemove', this._getOnFocusFunc(onFocus));
 	var self = this;
-	this.canvas.addEventListener('mouseout', 
-			function(){self.focusIndex=null;onFocus(null);}
+	element.addEventListener('mouseout', 
+			function(){
+				self.unfocus();
+				self.focusIndex=null;
+				onFocus(null);
+			}
 		);
 }
-HistoryGraph.prototype.setOnClick = function (onClick) {
+HistoryGraph.prototype.setOnClick = function (element, onClick) {
 	var self = this;
 	self.onClick = onClick;
-	this.canvas.addEventListener('click', 
+	element.addEventListener('click', 
 			function(){self.selectResultAt(self.focusIndex);}
 		);
 }
 HistoryGraph.prototype.selectResultAt = function (index) {
 	for (var i=0; i<this.dateLinks.length; i++) {
 		this.dateLinks[i].className = (i==index)? "selected dateLabel":"dateLabel";
+		this.selectIndicator.style.left = this.getCoordinate(index).x + "px";
 	}
 	if (this.onClick) {
 		this.onClick(index, this.runs[index]);
@@ -38,13 +43,22 @@ HistoryGraph.prototype.selectResultAt = function (index) {
 HistoryGraph.prototype._getOnFocusFunc = function (onFocus) {
 	var self = this;
 	return function (event) {
-		var x = self.canvas.parentElement.scrollLeft + event.x;
+		var x = self.canvas.parentElement.parentElement.scrollLeft + event.x 
+			- self.canvas.parentElement.offsetLeft;
 		var index = Math.floor(x * (self.dataSize-1) / self.width);
 		if (self.focusIndex!=index) {
 			self.focusIndex = index;
+			self.focus(index);
 			onFocus(self.runs[index]);
 		}
 	};
+};
+HistoryGraph.prototype.focus = function (index) {
+	this.focusIndicator.style.display = 'block';
+	this.focusIndicator.style.left = this.getCoordinate(index).x + "px";
+};
+HistoryGraph.prototype.unfocus = function () {
+	this.focusIndicator.style.display = 'none';
 };
 HistoryGraph.prototype._getOnClick = function (index) {
 	var self = this;
@@ -52,9 +66,33 @@ HistoryGraph.prototype._getOnClick = function (index) {
 		self.selectResultAt(index);
 	}
 };
+HistoryGraph.prototype._getOnMouseover = function (index) {
+	var self = this;
+	return function () {
+		self.focusIndex = index;
+		self.focus(index);
+	}
+};
+HistoryGraph.prototype._getOnMouseout = function () {
+	var self = this;
+	return function () {
+		self.focusIndex = null;
+		self.unfocus();
+	}
+};
 HistoryGraph.PIXEL_PER_RUN = 24;
 
 HistoryGraph.prototype.render = function () {
+
+	var focusIndicator = document.createElement("DIV");
+	focusIndicator.className = "graphIndicator";
+	this.canvas.parentNode.appendChild(focusIndicator);
+	this.focusIndicator = focusIndicator;
+	
+	var selectIndicator = document.createElement("DIV");
+	selectIndicator.className = "graphIndicator";
+	this.canvas.parentNode.appendChild(selectIndicator);
+	this.selectIndicator = selectIndicator;
 
 	element("runGraphScaleMax").innerHTML = this.maxTotal;
 	element("runGraphScaleHalf").innerHTML = Math.round(this.maxTotal/2);
@@ -84,6 +122,8 @@ HistoryGraph.prototype.render = function () {
 		a.href = 'javascript:void(0)';
 		var self = this;
 		a.addEventListener('click', this._getOnClick(i));
+		a.addEventListener('mouseover', this._getOnMouseover(i));
+		//a.addEventListener('mouseout', this._getOnMouseout(i));
 		var coordinate = this.getCoordinate(i, 0);
 		var runDate = new Date(run.date).toString('yy/MM/dd HH:mm');
 		a.innerHTML = runDate;

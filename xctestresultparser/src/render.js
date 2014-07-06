@@ -156,10 +156,10 @@ function renderHistory (data) {
 	var historyGraph = new HistoryGraph(runs, 
 		element('runGraph'), 
 		element('runGraphDates'));
-	historyGraph.setOnFocus(function (run) {
+	historyGraph.setOnFocus(element("canvasCover"), function (run) {
 		if (!run) return;
 	});
-	historyGraph.setOnClick(function (index, run) {
+	historyGraph.setOnClick(element("canvasCover"), function (index, run) {
 		if (isLoading) return;
 		var jsonpURL = "jsonp/run_" + run.date + ".js";
 		console.log(jsonpURL);
