@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style/style.css"/>
+	<title>Unit test report</title>
+</head>
+<body>
+	<main>
+		<h1>Unit test report</h1>
+		<section>
+			<h2>History</h2>
+			<div class="runGraphContainer">
+				<div style="width:800px;height:160px;" class="runGraphCanvasContainer">
+					<canvas id="runGraph" width="1600" height="180"></canvas>
+				</div>
+				<div class="runGraphDateContainer" id="runGraphDateContainer">
+					<div class="runGraphDates" id="runGraphDates">
+					</div>
+				</div>
+			<div>
+		</section>
+		<!--Run Report-->
+		<section id="run">
+			<h2>Test report</h2>
+			<sectipn>
+				<h3>Summary</h3>
+				<div id="runSummarySection">
+					<div id=summaryGraph" class="summaryGraph">
+						<div id="summaryGraphRed" class="summaryGraphElement red"></div>
+						<div id="summaryGraphGreen" class="summaryGraphElement green"></div>
+					</div>
+					<div class="clear"></div>
+					<table>
+						<tr>
+							<th>Date</th>
+							<td><span class="value" id="labelRunDate">-</span></td>
+						</tr>
+						<tr>
+							<th>Total</th>
+							<td><span class="value" id="labelRunTotal">-</span></td>
+						</tr>
+						<tr>
+							<th>Success</th>
+							<td><span class="value" id="labelRunSuccess">-</span></td>
+						</tr>
+						<tr>
+							<th>Fail</th>
+							<td><span class="value" id="labelRunFail">-</span></td>
+						</tr>
+						<tr>
+							<th>Skipped</th>
+							<td><span class="value" id="labelRunSkipped">-</span></td>
+						</tr>
+					</table>
+				</div>
+			</section>
+			<section>
+				<h3>Alert</h3>
+				<ul id="alertList">
+				</ul>
+			</section>
+			<section>
+				<h3>Detail</h3>
+				<div class="runTableWrapper">
+					<table id="runTable" class="runTable">
+					</table>
+				</div>
+			</section>
+		</section>
+		
+		<script type="text/javascript" src="./src/historyGraph.js"></script>
+		<script type="text/javascript" src="./src/render.js"></script>
+		<script type="text/javascript" src="./src/date.js"></script>
+		<script type="text/javascript" src="./jsonp/classHistory.js"></script>
+	</main>
+	<footer>
+		<!-- TODO add credit -->
+	</footer>
+</body>
+</html>
