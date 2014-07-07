@@ -22,7 +22,7 @@ public class XCTestResultParser {
 		try {
 			config = Config.createWithArgs(args);
 		} catch (XCTestResultParserException e) {
-			LOG.println(e.getMessage());
+			System.out.println(e.getMessage());
 			return;
 		}
 		
