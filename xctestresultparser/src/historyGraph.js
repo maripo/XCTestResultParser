@@ -8,8 +8,8 @@ var HistoryGraph = function (runs, canvas, dateContainer) {
 	this.canvas = canvas;
 	var self = this;
 	this.dateContainer = dateContainer;
-	this.canvas.parentElement.addEventListener('scroll', function(){
-		self.dateContainer.style.marginLeft = '-'+(self.canvas.parentElement.scrollLeft) + 'px';
+	this.canvas.parentElement.parentElement.addEventListener('scroll', function(){
+		self.dateContainer.style.marginLeft = '-'+(self.canvas.parentElement.parentElement.scrollLeft) + 'px';
 	});
 };
 HistoryGraph.prototype.setOnFocus = function (element, onFocus) {
@@ -99,8 +99,11 @@ HistoryGraph.prototype.render = function () {
 	
 	var canvas = this.canvas;
 	this.height = canvas.height;
-	canvas.width = HistoryGraph.PIXEL_PER_RUN * (this.dataSize-1);
-	this.dateContainer.style.width = (HistoryGraph.PIXEL_PER_RUN * (this.dataSize-1) + 16) + "px";
+	
+	// Stretch canvas
+	var canvasWidth = HistoryGraph.PIXEL_PER_RUN * (this.dataSize-1);
+	canvas.width = canvasWidth;
+	this.dateContainer.style.width = (canvasWidth + 16) + "px";
 	this.width = canvas.width;
 
 	var context = canvas.getContext("2d");
@@ -186,8 +189,30 @@ HistoryGraph.prototype.render = function () {
 	}
 	var lastIndex = runs.length-1;
 	this.selectResultAt(lastIndex);
+	
+	// Scroll
+	var scroller = canvas.parentElement.parentElement;
+	var scrollAmount = Math.max(0, canvasWidth - scroller.clientWidth);
+	
+	console.log("scroll="+(Math.max(0, canvasWidth - scroller.clientWidth)));
+	scroller.scrollLeft = (Math.max(0, canvasWidth - scroller.clientWidth));
+	
+	/*
+	setTimeout(this.getScrollAnimation(scrollAmount), 25);
+	*/
 };
-
+HistoryGraph.prototype.getScrollAnimation = function (scrollAmount) {
+	var self = this;
+	var scroller = this.canvas.parentElement.parentElement;
+	return function () {
+		if (scroller.scrollLeft < scrollAmount) {
+			scroller.scrollLeft = Math.min(scroller.scrollLeft+scrollAmount/10, scrollAmount);
+			if (scroller.scrollLeft < scrollAmount) {
+				setTimeout(self.getScrollAnimation(scrollAmount), 25);
+			}
+		}
+	}
+}; 
 HistoryGraph.prototype.getCoordinate = function (xValue, yValue) {
 	var xCoord = this.width * xValue / (this.dataSize - 1);
 	var yCoord = this.height * (1 - yValue / this.maxTotal);
