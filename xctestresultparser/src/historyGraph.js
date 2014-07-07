@@ -110,11 +110,6 @@ HistoryGraph.prototype.render = function () {
 	
 	var runs = this.runs;
 	
-	//Red fill
-	
-	context.fillStyle = '#fdd';
-	context.beginPath();
-	context.moveTo(0, this.height);
 	
 	//dateContainer
 	this.dateLinks = [];
@@ -135,11 +130,19 @@ HistoryGraph.prototype.render = function () {
 		this.dateContainer.appendChild(a);
 	}
 	
+	context.lineWidth = "1";
+	context.lineJoin = "round";
+	
+	//Red fill
+	context.fillStyle = '#fdd';
+	context.beginPath();
+	context.moveTo(0, this.height);
+	
 	for (var i=0; i<runs.length; i++) {
 		var coordinate = this.getCoordinate(i, runs[i].fail);
 		context.lineTo(coordinate.x, coordinate.y);
 	}
-	context.moveTo(this.width, this.height);
+	context.lineTo(this.width, this.height);
 	context.fill();
 	
 	//Green fill
@@ -156,8 +159,6 @@ HistoryGraph.prototype.render = function () {
 	}
 	context.fill();
 	
-	context.lineWidth = "1";
-	context.lineJoin = "round";
 	
 	//Red line
 	context.strokeStyle = "#f00";
