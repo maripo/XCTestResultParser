@@ -30,7 +30,7 @@ public class Config {
 	private static final String DEFAULT_OUTPUT_JSONP_DIR = "./xctestresultparser/jsonp";
 	
 	public static final DateFormat JS_PARSEABLE_DATE_FORMAT 
-		= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+		= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ");
 	private static final int DEFAULT_LIMIT = 100;
 
 	static {

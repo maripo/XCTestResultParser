@@ -70,7 +70,6 @@ function renderClassHistory (history) {
 
 function renderRunReport (data) {
 	var summary = data["run"]["summary"];
-	
 	write("labelRunDate", new Date(summary.date).toString("yyyy/MM/dd HH:mm:ss"));
 	write("labelRunTotal", summary.total || 0);
 	write("labelRunSuccess", summary.success || 0);

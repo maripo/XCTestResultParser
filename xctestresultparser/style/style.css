@@ -98,6 +98,7 @@ div.runGraphDateContainer {
 	width:786px;
 	overflow-x:hidden;
 	overflow-y:hidden;
+	clear:left;
 }
 div.runGraphDates {
 	width:1616px;
