@@ -15,17 +15,23 @@ public class Config {
 	
 	private String outputJsonpDir;
 	private String testResultsDir;
+	private int limit = 0;
 	
 	// Param keys
 	private static final String PARAM_HELP = "help";
 	private static final String PARAM_OUTPUT_JSONP_DIR = "outputJsonDir";
 	private static final String PARAM_TEST_RESULTS_DIR = "testResultsDir";
+	private static final String PARAM_LIMIT = "limit";
+	//TODO
+	private static final String PARAM_SINCE = "since";
+	private static final String PARAM_UNTIL = "until";
 	
 	// Default values
 	private static final String DEFAULT_OUTPUT_JSONP_DIR = "./xctestresultparser/jsonp";
 	
 	public static final DateFormat JS_PARSEABLE_DATE_FORMAT 
 		= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+	private static final int DEFAULT_LIMIT = 100;
 
 	static {
 		JS_PARSEABLE_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -55,6 +61,8 @@ public class Config {
 				else if (PARAM_TEST_RESULTS_DIR.equals(key)) {
 					LOG.println("result dir=" + value);
 					config.testResultsDir = value;
+				} else if (PARAM_LIMIT.equals(key)) {
+					config.limit = Integer.parseInt(value);
 				}
 				else {
 					throw new NoSuchParameterException(arg);
@@ -75,6 +83,10 @@ public class Config {
 		return config;
 	}
 
+	public int getLimit () {
+		return limit;
+	}
+
 	/**
 	 * Returns message for "--help" option
 	 * @return descriptions for all options
@@ -86,11 +98,16 @@ public class Config {
 		sb.append(PARAM_TEST_RESULTS_DIR);
 		sb.append("\t");
 		sb.append("[required] Specify container directory of \"result.plist\" files\n");
-		
+
 		sb.append("--");
 		sb.append(PARAM_OUTPUT_JSONP_DIR);
 		sb.append("\t");
 		sb.append("Specify output directory path of JSONP files\n");
+
+		sb.append("--");
+		sb.append(PARAM_LIMIT);
+		sb.append("\t");
+		sb.append("Limit number of test runs\n");
 		
 		sb.append("--");
 		sb.append(PARAM_HELP);

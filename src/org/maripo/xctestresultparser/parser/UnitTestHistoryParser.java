@@ -31,10 +31,19 @@ public class UnitTestHistoryParser {
 		UnitTestHistory history = new UnitTestHistory();
 		
 		List<ClassHistory> classHistories;
+		List<File> files = new ArrayList<File>();
 		
 		while (ite.hasNext()) {
 			File file = ite.next();
 			LOG.println(file.getAbsolutePath());
+			files.add(file);
+		}
+		int offset = 0;
+		if (config.getLimit() > 0 && config.getLimit() < files.size()) {
+			offset = files.size() - config.getLimit();
+		}
+		for (int i=offset; i<files.size(); i++) {
+			File file = files.get(i);
 			RunResult runResult;
 			try {
 				runResult = new UnitTestRunParser().setFile(file).parse();
