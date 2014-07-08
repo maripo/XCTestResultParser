@@ -2,13 +2,16 @@ package org.maripo.xctestresultparser.model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.maripo.xctestresultparser.exception.DateParserException;
 import org.maripo.xctestresultparser.exception.HelpRequiredException;
 import org.maripo.xctestresultparser.exception.MissingParamException;
 import org.maripo.xctestresultparser.exception.NoSuchParameterException;
+import org.maripo.xctestresultparser.util.DateParser;
 import org.maripo.xctestresultparser.util.LOG;
 
 public class Config {
@@ -16,6 +19,8 @@ public class Config {
 	private String outputJsonpDir;
 	private String testResultsDir;
 	private int limit = 0;
+	private Date since;
+	private Date until;
 	
 	// Param keys
 	private static final String PARAM_HELP = "help";
@@ -44,7 +49,7 @@ public class Config {
 	}
 	
 	// Init with command-line args
-	public static Config createWithArgs(String[] args) throws MissingParamException, NoSuchParameterException, HelpRequiredException {
+	public static Config createWithArgs(String[] args) throws MissingParamException, NoSuchParameterException, HelpRequiredException, DateParserException {
 		Config config = getDefaultConfig();
 		
 		Pattern pattern = Pattern.compile("--(.+?)=(.+?)");
@@ -66,10 +71,10 @@ public class Config {
 					config.limit = Integer.parseInt(value);
 				}
 				else if (PARAM_SINCE.equals(key)) {
-					
+					config.since = DateParser.parse(value);
 				}
 				else if (PARAM_UNTIL.equals(key)) {
-					
+					config.until = DateParser.parse(value);
 				}
 				else {
 					throw new NoSuchParameterException(arg);
