@@ -61,8 +61,15 @@ public class Config {
 				else if (PARAM_TEST_RESULTS_DIR.equals(key)) {
 					LOG.println("result dir=" + value);
 					config.testResultsDir = value;
-				} else if (PARAM_LIMIT.equals(key)) {
+				}
+				else if (PARAM_LIMIT.equals(key)) {
 					config.limit = Integer.parseInt(value);
+				}
+				else if (PARAM_SINCE.equals(key)) {
+					
+				}
+				else if (PARAM_UNTIL.equals(key)) {
+					
 				}
 				else {
 					throw new NoSuchParameterException(arg);
