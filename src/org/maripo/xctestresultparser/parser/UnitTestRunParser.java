@@ -48,9 +48,7 @@ public class UnitTestRunParser extends XMLParser {
 		Matcher matcher = fileNamePattern.matcher(file.getPath());
 		matcher.find();
 		String datePart = matcher.group(1);
-		LOG.println("datePart =" + datePart);
 		Date executedDate = fileNameDateFormat.parse(datePart);
-		LOG.println("date =" + executedDate);
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
@@ -97,7 +95,6 @@ public class UnitTestRunParser extends XMLParser {
 				} else if ("Skipped".equals(result)) {
 					methodResult.setResult(Result.SKIPPED);
 				} else {
-					LOG.println("Unknown Result: " + result);
 					methodResult.setResult(Result.UNKNOWN);
 				}
 				unitTestRun.add(methodResult);

@@ -16,9 +16,11 @@ public class Config {
 	private String outputJsonpDir;
 	private String testResultsDir;
 	private int limit = 0;
+	private boolean verbose = false;
 	
 	// Param keys
 	private static final String PARAM_HELP = "help";
+	private static final String PARAM_VERBOSE = "verbose";
 	private static final String PARAM_OUTPUT_JSONP_DIR = "outputJsonDir";
 	private static final String PARAM_TEST_RESULTS_DIR = "testResultsDir";
 	private static final String PARAM_LIMIT = "limit";
@@ -55,11 +57,9 @@ public class Config {
 				String value = matcher.group(2);
 				
 				if (PARAM_OUTPUT_JSONP_DIR.equals(key)) {
-					LOG.println("output dir=" + value);
 					config.outputJsonpDir = value;
 				}
 				else if (PARAM_TEST_RESULTS_DIR.equals(key)) {
-					LOG.println("result dir=" + value);
 					config.testResultsDir = value;
 				} else if (PARAM_LIMIT.equals(key)) {
 					config.limit = Integer.parseInt(value);
@@ -70,6 +70,9 @@ public class Config {
 			} else {
 				if (("--"+PARAM_HELP).equals(arg)) {
 					throw new HelpRequiredException();
+				} 
+				else if (("--"+PARAM_VERBOSE).equals(arg)) {
+					config.verbose  = true;
 				} else {
 					throw new NoSuchParameterException(arg);
 				}
@@ -114,6 +117,10 @@ public class Config {
 		sb.append("\t");
 		sb.append("Show help\n");
 		return sb.toString();
+	}
+	
+	public boolean isVerbose () {
+		return this.isVerbose();
 	}
 	
 	public String getOutputJsonpDir () {

@@ -35,7 +35,7 @@ public class UnitTestHistoryParser {
 		
 		while (ite.hasNext()) {
 			File file = ite.next();
-			LOG.println(file.getAbsolutePath());
+			LOG.println(file.getAbsolutePath(), config);
 			files.add(file);
 		}
 		int offset = 0;
@@ -52,7 +52,7 @@ public class UnitTestHistoryParser {
 				
 				
 			} catch (ParseException e) {
-				LOG.println("Failed to \"" + file.getAbsolutePath() + "\". Skip.");
+				LOG.println("Failed to parse \"" + file.getAbsolutePath() + "\". Skip.", config);
 				e.printStackTrace();
 				continue;
 			}

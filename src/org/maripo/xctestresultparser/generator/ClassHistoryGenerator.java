@@ -42,7 +42,6 @@ public class ClassHistoryGenerator extends JSONPGenerator {
 				List<Integer> results = new ArrayList<Integer>();
 				methodMap.put("name", methodHistory.getName());
 				methodMap.put("results", results);
-				LOG.println(methodHistory.getName());
 				for (MethodResult.Result result: methodHistory.getResults()) {
 					results.add(result.ordinal());
 				}
@@ -50,7 +49,6 @@ public class ClassHistoryGenerator extends JSONPGenerator {
 			}
 			classes.add(classMap);
 		}
-		LOG.println(new JSONObject(map).toJSONString());
 		return map;
 	}
 
