@@ -131,7 +131,7 @@ public class Config {
 	}
 	
 	public boolean isVerbose () {
-		return this.isVerbose();
+		return this.verbose;
 	}
 	
 	public String getOutputJsonpDir () {
