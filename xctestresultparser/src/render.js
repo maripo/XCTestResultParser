@@ -1,68 +1,9 @@
-var ClassHistory = function (history) {
-	this.methodMap = [];
-	this.methods = [];
-	for (var i=0, l=history.classes.length; i<l; i++) {
-		var classHistory = history.classes[i];
-		for (var j=0, ll=classHistory.methods.length; j<ll ; j++){
-			var methodHistory = classHistory.methods[j];
-			var key = classHistory + ":" + methodHistory;
-			var obj = new MethodHistory(classHistory.name, methodHistory.name, methodHistory.results);
-			this.methodMap[key] = obj;
-			this.methods.push(obj);
-		}
-	}
-};
-ClassHistory.prototype.findByMethodName = function (key /* className:methodName */) {
-	return this.methodMap[key];
-}
-ClassHistory.prototype.forEachIncident = function (index, callback) {
-	for (var i=0; i<this.methods.length; i++) {
-		var incident = this.methods[i].getIncident(index);
-		if (incident) {
-			callback(incident);
-		}
-	}
-};
-
 var classHistory;
 var selectedIndex = 0;
 var isLoading = false;
+var dates = [];
 
-var MethodHistory = function (className, methodName, results) {
-	this.className = className;
-	this.methodName = methodName;
-	this.results = results;
-};
-var RESULT_SUCCEEDED = 0;
-var RESULT_FAILED = 1;
-var RESULT_SKIPPED = 2;
-var RESULT_UNKNOWN = 3;
-var RESULT_NONEXISTENT = 4;
-var RESULT_CREATED = 5;
-
-MethodHistory.prototype.getIncident = function (index) {
-	var result = this.results[index];
-	var prevResult = -1;
-	
-	var isNew = (RESULT_SUCCEEDED==result || RESULT_FAILED==result);
-	for (var i=index-1; i>=0; i--) {
-		if (RESULT_SUCCEEDED==this.results[i] || RESULT_FAILED==this.results[i]) {
-			prevResult = this.results[i];
-			isNew = false;
-			break;
-		}
-	}
-	// Check green<=>red
-	if (prevResult>=0 && result!=prevResult && (RESULT_SUCCEEDED==result || RESULT_FAILED==result)) {
-		return {class:this.className, method:this.methodName, result:result};
-	}
-	// Check method creation
-	if (isNew) {
-		return {class:this.className, method:this.methodName, result:RESULT_CREATED};
-	}
-	return null;
-};
-
+/** Render contents of "classHistory.js" */
 function renderClassHistory (history) {
 	classHistory = new ClassHistory(history);
 	loadJSONP("jsonp/history.js");
@@ -83,6 +24,8 @@ function renderRunReport (data) {
 	
 	renderRunDetailTable (data);
 	element("alertList").innerHTML = "";
+	
+	// Render alert event list
 	classHistory.forEachIncident(selectedIndex, function(incident){
 		var message = incident.class + "." + incident.method;
 		var li = document.createElement("li");
@@ -122,7 +65,8 @@ function renderRunDetailTable (data) {
 		var methods = cls["methods"];
 		for (j=0; j<methods.length; j++) {
 			var method = methods[j];
-			table.appendChild(createMethodRow(method));
+			var methodHistory = classHistory.findByMethodName(cls.name + ":" + method.name);
+			table.appendChild(createMethodRow(method, methodHistory));
 		}
 	}
 }
@@ -130,28 +74,57 @@ function renderRunDetailTable (data) {
 function createClassRow (classResult) {
 	var tr = document.createElement("tr");
 	var td = createCell(classResult.name, "class");
-	td.colSpan = 2;
+	td.colSpan = 4;
 	tr.appendChild(td);
 	return tr;
 }
 
-function createMethodRow (methodResult) {
+function createMethodRow (methodResult, methodHistory) {
 	var tr = document.createElement("tr");
 	tr.className = 'methodRow ' + methodResult.resultLabel;
 	tr.appendChild(createCell(methodResult.name, 'methodName'));
 	tr.appendChild(createCell(methodResult.resultLabel, methodResult.resultLabel));
+	
+	// Created
+	var created = (methodHistory && methodHistory.getCreated())?
+			methodHistory.getCreated().toString("yyyy/MM/dd HH:mm"):"";
+	tr.appendChild(createCell(created, null));
+	// Latest event
+	var latestEventLabel = "";
+	if (methodHistory) {
+		var latestEvent = methodHistory.getLatestEvent();
+		if (latestEvent.since) {
+			if (latestEvent.result==RESULT_SUCCEEDED) {
+				latestEventLabel = "Green since " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
+			}
+			if (latestEvent.result==RESULT_FAILED) {
+				latestEventLabel = "Red since " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
+			}
+		}
+	}
+	
+	tr.appendChild(createCell(latestEventLabel, null));
 	return tr;
 }
 
 function createCell (text, styleClass) {
 	var td = document.createElement("td");
 	td.innerHTML = text;
-	td.className = styleClass;
+	if (styleClass) {
+		td.className = styleClass;
+	}
+	
 	return td;
 }
 
+/** Render contents of "history.js" */
 function renderHistory (data) {
 	var runs = data["runs"];
+	//dates
+	for (var i=0; i<runs.length; i++) {
+		dates[i] = new Date(runs[i].date);
+	}
+	
 	var historyGraph = new HistoryGraph(runs, 
 		element('runGraph'), 
 		element('runGraphDates'));
@@ -169,16 +142,11 @@ function renderHistory (data) {
 	historyGraph.render();
 }
 
-
 function loadJSONP (src) {
 	var elm = document.createElement("script");
 	elm.src = src;
 	elm.type = "text/javascript";
 	document.body.appendChild(elm);
-}
-
-function testJSONP () {
-	loadJSONP("jsonp/run_20140620104258.js");
 }
 
 function element (elementId) {

@@ -74,10 +74,10 @@ td, th {
 	margin: 2px;
 }
 table.runTable {
-	width: 480px;
+	width: 100%;
 }
 table.runTable td.methodName {
-	width: 70%;
+	width: 30%;
 }
 table.runTable td.Succeeded {
 	background-color: #dfd;

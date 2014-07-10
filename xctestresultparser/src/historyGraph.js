@@ -195,7 +195,6 @@ HistoryGraph.prototype.render = function () {
 	var scroller = canvas.parentElement.parentElement;
 	var scrollAmount = Math.max(0, canvasWidth - scroller.clientWidth);
 	
-	console.log("scroll="+(Math.max(0, canvasWidth - scroller.clientWidth)));
 	scroller.scrollLeft = (Math.max(0, canvasWidth - scroller.clientWidth));
 	
 	/*
