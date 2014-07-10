@@ -1,13 +1,19 @@
 package org.maripo.xctestresultparser.parser;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.maripo.xctestresultparser.model.Config;
 
 public class FileFinder {
 
@@ -22,7 +28,10 @@ public class FileFinder {
 		}
 		return instance;
 	}
-	public void loadFiles(String testResultDir) {
+	
+	DateFormat FILE_NAME_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss Z");
+	
+	public void loadFiles(String testResultDir, Config config) {
 		Pattern patternTestResult = Pattern.compile("([^\\/]+)\\.xctestresults");
 		resultFiles = new ArrayList<File>();
 		File dir = new File(testResultDir);
@@ -30,7 +39,15 @@ public class FileFinder {
 		for (File file: dir.listFiles()) {
 			Matcher matcher = patternTestResult.matcher(file.getName());
 			if (matcher.find()) {
-				resultDirectories.add(file);
+				System.out.println(matcher.group(1));
+				try {
+					Date date = FILE_NAME_DATE_FORMAT.parse(matcher.group(1));
+					if ((config.getSince()==null || config.getSince().getTime()<=date.getTime())
+							&& (config.getUntil()==null || config.getUntil().getTime()>=date.getTime()))
+					resultDirectories.add(file);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		Collections.sort(resultDirectories, new Comparator<File>() {

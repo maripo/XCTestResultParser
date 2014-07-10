@@ -141,4 +141,11 @@ public class Config {
 		return this.testResultsDir;
 	}
 
+	public Date getUntil () {
+		return this.until;
+	}
+	public Date getSince () {
+		return this.since;
+	}
+
 }

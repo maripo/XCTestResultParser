@@ -26,7 +26,7 @@ public class UnitTestHistoryParser {
 
 	public UnitTestHistory parse() {
 		String testResultDir = config.getTestResultsDir();
-		FileFinder.getInstance().loadFiles(testResultDir);
+		FileFinder.getInstance().loadFiles(testResultDir, config);
 		Iterator<File> ite = FileFinder.getInstance().getIterator();
 		UnitTestHistory history = new UnitTestHistory();
 		
