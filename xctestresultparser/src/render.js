@@ -72,9 +72,8 @@ function renderRunDetailTable (data) {
 }
 
 function clearTable (table) {
-	var rows = table.getElementsByTagName("tr");
-	for (var i=1; i<rows.length; i++) {
-		rows[i].parentNode.removeChild(rows[i]);
+	while (rows = table.getElementsByTagName("tr"), rows.length>1) {
+		rows[1].parentNode.removeChild(rows[1]);
 	}
 }
 
