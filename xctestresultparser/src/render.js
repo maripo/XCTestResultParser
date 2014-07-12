@@ -55,7 +55,7 @@ function renderRunReport (data) {
 
 function renderRunDetailTable (data) {
 	var table = element("runTable");
-	table.innerHTML = '';
+	clearTable(table);
 	var classes = data["run"]["classes"];
 	for (i=0; i<classes.length;i++) {
 	
@@ -70,6 +70,14 @@ function renderRunDetailTable (data) {
 		}
 	}
 }
+
+function clearTable (table) {
+	var rows = table.getElementsByTagName("tr");
+	for (var i=1; i<rows.length; i++) {
+		rows[i].parentNode.removeChild(rows[i]);
+	}
+}
+
 
 function createClassRow (classResult) {
 	var tr = document.createElement("tr");
@@ -95,10 +103,10 @@ function createMethodRow (methodResult, methodHistory) {
 		var latestEvent = methodHistory.getLatestEvent();
 		if (latestEvent.since) {
 			if (latestEvent.result==RESULT_SUCCEEDED) {
-				latestEventLabel = "Green since " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
+				latestEventLabel = "Turned Green at " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
 			}
 			if (latestEvent.result==RESULT_FAILED) {
-				latestEventLabel = "Red since " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
+				latestEventLabel = "Turned Red at " + latestEvent.since.toString("yyyy/MM/dd HH:mm");
 			}
 		}
 	}

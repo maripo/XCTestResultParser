@@ -95,10 +95,10 @@ table.runTable td.method {
 	padding-left:1em;
 }
 table.runTable td.created {
-	width: 25%;
+	width: 20%;
 }
 table.runTable td.latest {
-	width: 25%;
+	width: 30%;
 }
 
 div.runGraphDateContainer {
