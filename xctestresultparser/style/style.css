@@ -65,6 +65,8 @@ div.graphIndicator {
 	z-index:2;
 	position:absolute;
 }
+
+/* Detail Table */
 table {
 	border: solid 1px #aaa;
 	border-collapse: collapse;
@@ -76,8 +78,8 @@ td, th {
 table.runTable {
 	width: 100%;
 }
-table.runTable td.methodName {
-	width: 30%;
+table.runTable tr.methodRow td{
+	font-size:85%;
 }
 table.runTable td.Succeeded {
 	background-color: #dfd;
@@ -88,9 +90,17 @@ table.runTable td.Failed {
 table.runTable td.class {
 	font-weight: bold;
 }
-table.runTable td.methodName {
+table.runTable td.method {
+	width: 30%;
 	padding-left:1em;
 }
+table.runTable td.created {
+	width: 25%;
+}
+table.runTable td.latest {
+	width: 25%;
+}
+
 div.runGraphDateContainer {
 	height:100px;
 	width:inherit;

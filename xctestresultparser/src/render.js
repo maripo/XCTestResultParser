@@ -82,13 +82,13 @@ function createClassRow (classResult) {
 function createMethodRow (methodResult, methodHistory) {
 	var tr = document.createElement("tr");
 	tr.className = 'methodRow ' + methodResult.resultLabel;
-	tr.appendChild(createCell(methodResult.name, 'methodName'));
+	tr.appendChild(createCell(methodResult.name, 'method'));
 	tr.appendChild(createCell(methodResult.resultLabel, methodResult.resultLabel));
 	
 	// Created
 	var created = (methodHistory && methodHistory.getCreated())?
 			methodHistory.getCreated().toString("yyyy/MM/dd HH:mm"):"";
-	tr.appendChild(createCell(created, null));
+	tr.appendChild(createCell(created, "created"));
 	// Latest event
 	var latestEventLabel = "";
 	if (methodHistory) {
@@ -103,7 +103,7 @@ function createMethodRow (methodResult, methodHistory) {
 		}
 	}
 	
-	tr.appendChild(createCell(latestEventLabel, null));
+	tr.appendChild(createCell(latestEventLabel, "latest"));
 	return tr;
 }
 
