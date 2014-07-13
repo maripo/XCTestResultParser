@@ -77,12 +77,25 @@ function clearTable (table) {
 	}
 }
 
+function getFoldAction (classResult) {
+	return function () {
+		alert("todo");
+	}
+}
+
 
 function createClassRow (classResult) {
 	var tr = document.createElement("tr");
 	var td = createCell(classResult.name, "class");
 	td.colSpan = 4;
 	tr.appendChild(td);
+	
+	//fold button
+	var foldButton = document.createElement("input");
+	foldButton.type = "button";
+	foldButton.className = ("foldButton open");
+	foldButton.addEventListener("click", getFoldAction(classResult));
+	td.appendChild(foldButton);
 	return tr;
 }
 

@@ -90,6 +90,25 @@ table.runTable td.Failed {
 table.runTable td.class {
 	font-weight: bold;
 }
+
+table.runTable td.class input.foldButton {
+	width: 13px;
+	height: inherit;
+	border:none;
+	float:left;
+	background-repeat: no-repeat;
+	background-position: center center;
+	line-height:16px;
+	background-color: white;
+	margin-right:4px;
+}
+table.runTable td.class input.open {
+	background-image:url(img/fold_plus.png);
+}
+table.runTable td.class input.close {
+	background-image:url(img/fold_MINUS.png);
+}
+
 table.runTable td.method {
 	width: 30%;
 	padding-left:1em;
